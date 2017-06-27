@@ -95,45 +95,44 @@ We therefore challenge the traditional notion of Machine Learning as happening o
 \section{Theoretical building blocks}
 \label{sect:bg_related}
 
-Four building blocks
-
+Aside from the engineering effort necessary to realize an architecture as we propose, we've identified 4 main theoretical aspects, or building-blocks, that could make it a target for novel scientific research, the confirmation and refinement of current theories, or even the formulation of new conjectures.
 
 \subsection{Client-side Machine Learning}
 \label{ssect:cs_ML}
 
-\cite{2003automaticKEfromWebDocuments}
-\cite{mcmahan2016communication}
-\cite{konevcny2016federatedlearning}
-\cite{konevcny2016federatedoptimization}
-\cite{2017secureaggregation}
+... holds the promise of extreme scalability even for the smallest of startup companies. Because computations are mostly transferred to the client, organizations can limit their investment to the bare minimum of running any common Web-Site: Some servers transmitting snippets of client-side code as well as a sufficient database infrastructure. While there are still many challenges to overcome until client-side ML becomes ubiquitous, progress is already under way: Two teams \cite{mcmahan2016communication}, \cite{konevcny2016federatedlearning} report on a new distributed NN model that needs much less communication than synchronized SGD. As nodes in such a federated approach have but a tiny sub-sample of a traditional, global database, new algorithms are being devised for this setting \cite{konevcny2016federatedoptimization}. Because client-side computations might utilize personal information available only on a phone or tablet and model updates could inadvertently contain fragments of such information, secure server-side model aggregation has to be developed \cite{2017secureaggregation}.
 
-\cite{shi2012reciprocalrank}
+%\cite{shi2012reciprocalrank}
 
 \subsection{Privacy \& Security}
 \label{ssect:privacy_security}
 
-\cite{malle2016right}
+Privacy aware Machine Learning has been a hot topic for years \cite{wainwright2012paml} with its importance increasing dramatically due to ever intensifying limitations imposed by government regulations as well as public demand. One dramatic advantage of a distributed, client-side ML platform as we suggest it would be the isolation of privacy-endangering information within each user's personal device, rendering transfer of such information unnecessary, thereby effortlessly satisfying data protection regulations. On the other hand, learning on very small, subjective subsets of 'reality' could be seen as a profound distortion of data, and algorithms will have to be tested for suitability as well as stability in such scenarios \cite{malle2016right}.
 
-\subsection{interactive Machine Learning (iML)}
+\subsection{Interactive Machine Learning (iML)}
 \label{ssect:iML}
 
-\cite{2016iMLExperiment}
-\cite{2016HolzingeriML}
-\cite{2016KiesebergDITL}
+Interactive ML algorithms adapt their models not just via feedback after their learning phase, but by continuously interacting with an outside \textit{oracle} (assumed to be omniscient), drawing positive / negative reinforcement from this interaction \cite{2016HolzingeriML}. Such systems are especially desirable in areas requiring highly-personalized predictions or decision support \cite{2016KiesebergDITL}; moreover human brains are known to be very good at approximating solutions and learning from a very small set of samples, thus enabling us to 'intuit' solutions that exact algorithms need (super)exponential time to resolve \cite{2016iMLExperiment}.
 
-\subsection{distributed Bagging}
+Since client-side recommenders in our proposed architecture would continuously compute \& provide users with individual recommendations which they can accept or reject, one could interpret this platform as a distributed system of interactive Machine Learning. As a consequence, one could transfer models learned by one user to new users of similar characteristic (however we obtain this information), thereby solving the notorious \textit{cold start} problem well known in the recommender community.
+
+
+\subsection{Distributed Bagging}
 \label{ssect:dist_bag}
 
-\cite{breiman1996bagging}
+Another intriguing aspect to our proposal comes from the field of ensemble learning, where Leo Breiman conceived the technique of \textit{Bagging} \cite{breiman1996bagging} in 1994. In Bagging (short for 'bootstrap aggregating') a global population is randomly sampled into several bags, so that each bag holds its own view of reality. Subsequently predictors are trained on these isolated sub-samples with the consequence of over-fitting on their respective, local data. Finally an aggregation mechanism fuses the local models back together, producing a much more stable global predictor.
+
+Our local sphere approach might be seen as analogous to the idea of bagging, potentially distributed over billions of devices and with access to data not permissible in a central dataset. The overlapping of local spheres produces the same effect as sampling with replacement does for Bagging; the main difference of our strategy being the lack of randomness, since user-data are not actually 'sampled' from global knowledge. It remains to be seen if this difference presents a major drawback or actually an advantage.
 
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=1\textwidth]{figures/bagging_vs_local_sphere}
-		\caption{Bagging vs. Spheres: To the left we depict the traditional bootstrap approach. To the right we see a global graph with user-defined \textit{local spheres}, which influence each other via their overlapping segments (albeit each residing on their respective client). The graph was generated using D3.js \cite{zhu2013d3js}}
+		\caption{Bagging vs. Spheres: To the left we depict the traditional bootstrap approach. To the right we see a global graph with user-defined \textit{local spheres}, which influence each other via their overlapping segments (albeit each residing on their respective client). The graph visualization was generated using D3.js \cite{zhu2013d3js}}
 		\label{fig:bagging_vs_sphere}
 	\end{center}
 \end{figure}
 
+% \vspace{-1cm}
 
 \section{Proposed Workflow}
 \label{sect:workflow}
@@ -145,7 +144,7 @@ In order to organize a perfect interplay of the components described above, we s
 	\item The server computes a local sphere by reconciling the client's request with it's own security / publication policy and pushes it down to the client.
 	\item Once the local sphere is instantiated, the actually relevant user data are prepared \& visualized; the whole local sphere is instantiated within a client-side graph library in the background.
 	\item Client-side recommender algorithms continuously check the local sphere that is not already part of the user data for possible new information and recommend them on occasion.
-	\item Client-side 'providers' utilize the users personal information accessible via her local device or social media account, scanning the web for suitable information items on every user interaction with the local sphere. Such information items are again recommended to the user on a regular basis.
+	\item Client-side \textit{gatherers} (e.g. web crawlers) utilize the users personal information accessible via her local device or social media account, scanning the web for suitable information items on every user interaction with the local sphere. Any extracted information items are again recommended to the user on a regular basis. A user's private data might even act as a personalized ontology and be combined with well-known knowledge extraction methods \cite{2003automaticKEfromWebDocuments}.
 	\item The user interacts with her data via adding, connecting or re-arranging items. Each time new information is introduced into a local sphere it is synchronized to the server and - via it's overlapping segments with other local spheres - to those respective clients as well.
 \end{enumerate}
 
