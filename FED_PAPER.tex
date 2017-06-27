@@ -23,6 +23,8 @@
 \usepackage{soul}
 \usepackage{comment}
 
+\usepackage[font=small, labelfont=bf]{caption}
+
 \newtheorem{prop}{Property}
 
 \newenvironment{Bitemize}{\renewcommand\labelitemi{\textbullet}\begin{itemize}}{\end{itemize}}
@@ -74,23 +76,43 @@ With Google's \textit{Federated Learning} \& Facebook's introduction of client-s
 \begin{figure}[H]
 	\begin{center}
 		\includegraphics[width=0.9\textwidth]{figures/local_sphere}
-		\caption{Publish-subscribe mechanism on a client constantly synchronizing a subsample of a \textit{global database} to constitute what we term the \textit{local sphere}}
-		\label{fig:anon_categories}
+		\caption{Publish-subscribe mechanism used by a client to constantly synchronize a subsample of a \textit{global database} to constitute what we term the \textit{local sphere}.}
+		\label{fig:local_sphere}
+	\end{center}
+\end{figure}
+
+
+\begin{figure}[H]
+	\begin{center}
+		\includegraphics[width=1\textwidth]{figures/bagging_vs_local_sphere}
+		\caption{Bagging vs. Spheres: To the left we depict the traditional bootstrap approach. To the right we see a \textit{global knowledge graph} with user-defined \textit{local spheres}, which influence each other via their overlapping segments (albeit each residing on the client).}
+		\label{fig:bagging_vs_sphere}
 	\end{center}
 \end{figure}
 
 
 
-\cite{2003automaticKEfromWebDocuments}
+
+
 
 \cite{leskovec2006recpatterns}
 \cite{leskovec2006samplinggraphs}
 \cite{leskovec2007blogpatterns}
 
+\cite{breiman1996bagging}
+
+\cite{2016iMLExperiment}
+\cite{2016HolzingeriML}
+\cite{2016KiesebergDITL}
+
+\cite{malle2016right}
+
 \cite{mcmahan2016communication}
 \cite{konevcny2016federatedlearning}
 \cite{konevcny2016federatedoptimization}
 \cite{2017secureaggregation}
+
+\cite{2003automaticKEfromWebDocuments}
 
 \cite{shi2012reciprocalrank}
 
