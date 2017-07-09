@@ -33,16 +33,16 @@
 
 \title{The more the merrier - Federated learning from local sphere recommendations}
 
-% \author{Bernd Malle\inst{1}\inst{2}, Peter Kieseberg\inst{1}\inst{2}, Edgar Weippl\inst{2}, Andreas Holzinger\inst{1}}
+\author{Bernd Malle\inst{1}\inst{2}, Nicola Giuliani\inst{1}, Peter Kieseberg\inst{1}\inst{2} and Andreas Holzinger\inst{1}}
 
-%\institute{Holzinger Group HCI-KDD \\
-%Institute for Medical Informatics, Statistics \& Documentation\\
-%            Medical University Graz, Austria\\
-%            \texttt{b.malle@hci-kdd.org}
-%\and
-%SBA Research gGmbH, Favoritenstraße 16, 1040 Wien \\
-%			\texttt{PKieseberg@sba-research.org}
-%}
+\institute{Holzinger Group HCI-KDD \\
+Institute for Medical Informatics, Statistics \& Documentation\\
+            Medical University Graz, Austria\\
+            \texttt{b.malle@hci-kdd.org}
+\and
+SBA Research gGmbH, Favoritenstraße 16, 1040 Wien \\
+			\texttt{PKieseberg@sba-research.org}
+}
 	
 \maketitle
 
@@ -51,11 +51,11 @@
 % ==================================
 \begin{abstract}
 	
-With Google's \textit{Federated Learning} \& Facebook's introduction of client-side NLP into their chat service, the era of client-side Machine Learning has finally begun. While interesting ML approaches beyond the realm of toy examples were hitherto confined to large data-centers and powerful GPU's, exponential trends in computing technology and the introduction of billions of smartphones bring sophisticated processing pipelines within reach of even hand-held devices. Such approaches hold several promises: 1. Without the need for powerful server infrastructures, even small companies could be scalable to millions of users easily and cost-efficiently; 2. Since data only used in the learning process never need to leave the client, personal information can be used free of privacy and data security concerns; 3. Since privacy is preserved automatically, the full range of personal information on the client device can be utilized for learning; and 4. without round-trips to the server, results like recommendations can be made available to users much faster, resulting in enhanced user experience. In this paper we propose an architecture for federated learning from personalized, graph based recommendations computed on client devices, collectively creating \& enhancing a global knowledge graph. In this network, individual users will 'train' their local recommender engines, while a server-based voting mechanism aggregates the developing client-side models, preventing over-fitting on highly subjective data from tarnishing the global model.
+With Google's \textit{Federated Learning} \& Facebook's introduction of client-side NLP into their chat service, the era of client-side Machine Learning is upon us. While interesting ML approaches beyond the realm of toy examples were hitherto confined to large data-centers and powerful GPU's, exponential trends in technology and the introduction of billions of smartphones enable sophisticated processing swarms of even hand-held devices. Such approaches hold several promises: 1. Without the need for powerful server infrastructures, even small companies could be scalable to millions of users easily and cost-efficiently; 2. Since data only used in the learning process never need to leave the client, personal information can be used free of privacy and data security concerns; 3. Since privacy is preserved automatically, the full range of personal information on the client device can be utilized for learning; and 4. without round-trips to the server, results like recommendations can be made available to users much faster, resulting in enhanced user experience. In this paper we propose an architecture for federated learning from personalized, graph based recommendations computed on client devices, collectively creating \& enhancing a global knowledge graph. In this network, individual users will 'train' their local recommender engines, while a server-based voting mechanism aggregates the developing client-side models, preventing over-fitting on highly subjective data from tarnishing the global model.
 
 \medskip
 
-\textbf{Keywords}: machine learning, federated learning, interactive learning, the local sphere, graph based recommendations, personalized ML models, distributed bagging
+\textbf{Keywords}: Machine Learning, federated ML, interactive ML, the local sphere, graph based personalized recommenders, distributed bagging
 
 
 \end{abstract}
@@ -70,27 +70,28 @@ With Google's \textit{Federated Learning} \& Facebook's introduction of client-s
 % ==================================
 %			INTRODCUTION
 % ==================================
+
 \section{Introduction and Motivation}
 \label{sect:intro_motivation}
 
 A 2006 paper \cite{leskovec2006recpatterns} examined recommender networks crystallizing from purchases based upon previously received product recommendations by employing an online shopping system observing purchases and recommendations of several product categories. Users of the platform were modeled as nodes in a graph with recommendations connecting them. This resulted in a collection of fragmented subgraphs representing series of so called \textit{recommendation cascades}. Their analysis revealed that an overwhelming percentage of all relevant recommendations originated from a subgraph with a diameter of only {\raise.17ex\hbox{$\scriptstyle\sim$}}1.2, that is a node's immediate vicinity. Similar findings were also reported out of the blogosphere \cite{leskovec2007blogpatterns}.
 
-Observing a seemingly unrelated field of Software Development, the early 2010s have yielded new Web frameworks bringing the power of publish/subscribe systems within reach of even single developers. These mechanisms work by reconciling two potentially conflicting interests in a set-theoretic way: The set of all data-points a client wishes to receive are intersected with the set of all data-points a server is allowed to publish to specific individuals. This intersection is then pushed down to the client and constantly kept up to date, obviating the need for a client to permanently send new data / update requests. This leads to a certain sub-sample of global data permanently residing on the client device; in the case of a graph structure (social network, knowledge graph) this sub-sample would (at least) contain a node's immediate neighborhood.
+Observing an seemingly unrelated field of Software Development, the early 2010s have yielded new Web frameworks bringing the power of publish/subscribe systems within reach of even single developers. These mechanisms work by reconciling two potentially conflicting interests in a set-theoretic way: The set of all data-points a client wishes to receive and the set of all data-points a server is allowed to publish. This intersection is then pushed down to the client and constantly kept up to date, obviating the need for a client to permanently send new data / update requests. This leads to a certain sub-sample of global data permanently residing on the client device; in the case of a graph structure this sub-sample would (at minimum) contain a node's immediate neighborhood.
 
 Combining these two developments, we arrived at the definition of a \textit{local sphere} residing on a client device, representing a subset of the globally available information within a system. As for most recommendations those data points are seemingly the only ones relevant, we conjecture a new system architecture based on client-side recommenders whose interaction with the user results in modifications of the local sphere, which by means of publish/subscribe are propagated throughout the system, in turn triggering possible actions by other users.
 
-We therefore challenge the traditional notion of Machine Learning as happening on powerful, centralized servers and would like to replace them by a collective of mundane personal devices. Although this might seem futuristic, we see it as a logical solution especially to the problems of large-scale graph analysis \cite{leskovec2006samplinggraphs} as well as a continuation of a long-running trend towards employing commodity hardware for even the most demanding applications \cite{al2008scalable}.
+We therefore challenge the traditional notion of Machine Learning as happening on powerful, centralized servers and would like to replace them by a collective of mundane personal devices. We see this as a logical solution especially to the problems of large-scale graph analysis \cite{leskovec2006samplinggraphs} as well as a continuation of a long-running trend towards employing commodity hardware for even the most demanding applications \cite{al2008scalable}. Ultimately, it could provide a globally distributed web of personalized knowledge extraction agents \cite{Holzinger:2017:InauguralMAKE}.
 
-
+\vspace*{-0.3cm}
 \begin{figure}[H]
 	\begin{center}
-		\includegraphics[width=0.8\textwidth]{figures/local_sphere}
+		\includegraphics[width=0.8\textwidth, height=5.6cm]{figures/local_sphere}
 		\caption{Publish-subscribe mechanism used by a client to constantly synchronize a subsample of a \textit{global database} to constitute what we term the \textit{local sphere}. Note that the local sphere is a superset of the user's data - it may contain items a user is not actually requesting, but might be significant for computing relevant recommendations.}
 		\label{fig:local_sphere}
 	\end{center}
 \end{figure}
 
-
+\vspace*{-1.2cm}
 
 \section{Theoretical building blocks}
 \label{sect:bg_related}
@@ -125,6 +126,7 @@ Another intriguing aspect to our proposal comes from the field of ensemble learn
 Our local sphere approach might be seen as analogous to the idea of bagging, potentially distributed over billions of devices and with access to data not permissible in a central dataset. The overlapping of local spheres produces the same effect as sampling with replacement does for Bagging; the main difference of our strategy being the lack of randomness, since user-data are not actually 'sampled' from global knowledge. It remains to be seen if this difference presents a major drawback or actually an advantage.
 
 \begin{figure}[H]
+	\vspace*{-0.5cm}
 	\begin{center}
 		\includegraphics[width=1\textwidth]{figures/bagging_vs_local_sphere}
 		\caption{Bagging vs. Spheres: To the left we depict the traditional bootstrap approach. To the right we see a global graph with user-defined \textit{local spheres}, which influence each other via their overlapping segments (albeit each residing on their respective client). The graph visualization was generated using D3.js \cite{zhu2013d3js}}
@@ -132,7 +134,7 @@ Our local sphere approach might be seen as analogous to the idea of bagging, pot
 	\end{center}
 \end{figure}
 
-% \vspace{-1cm}
+\vspace*{-1.2cm}
 
 \section{Proposed Workflow}
 \label{sect:workflow}
@@ -144,7 +146,7 @@ In order to organize a perfect interplay of the components described above, we s
 	\item The server computes a local sphere by reconciling the client's request with it's own security / publication policy and pushes it down to the client.
 	\item Once the local sphere is instantiated, the actually relevant user data are prepared \& visualized; the whole local sphere is instantiated within a client-side graph library in the background.
 	\item Client-side recommender algorithms continuously check the local sphere that is not already part of the user data for possible new information and recommend them on occasion.
-	\item Client-side \textit{gatherers} (e.g. web crawlers) utilize the users personal information accessible via their local device or social media account, scanning the web for suitable information items on every user interaction with the local sphere. Any extracted information items are again recommended to the user on a regular basis. A user's private data might even act as a personalized ontology and be combined with well-known knowledge extraction methods \cite{2003automaticKEfromWebDocuments}.
+	\item Client-side \textit{gatherers} (web crawlers) utilize the users personal information accessible via their local device or social media account, scanning the web for suitable information items on every user interaction with the local sphere. Any extracted information items are again recommended to the user on a regular basis. Users' private data might even act as personalized ontologies and be combined with well-known knowledge extraction methods \cite{2003automaticKEfromWebDocuments}.
 	\item The user interacts with their data via adding, connecting or re-arranging items. Each time new information is introduced into a local sphere it is synchronized to the server and - via it's overlapping segments with other local spheres - to those respective clients as well.
 \end{enumerate}
 
